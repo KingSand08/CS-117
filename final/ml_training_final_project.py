@@ -44,12 +44,12 @@ shuffled_targets = targets_equal_priors[shuffled_indicies]
 #? Splitting the data
 # Split the dataset into train and temp sets
 train_inputs, temp_inputs, train_targets, temp_targets = train_test_split(
-shuffled_inputs, shuffled_targets, test_size=0.2, random_state=42
+shuffled_inputs, shuffled_targets, test_size=0.3, random_state=42
 )
 
 # Split the temp set into validation (50% of temp) and test (50% of temp) sets
 validation_inputs, test_inputs, validation_targets, test_targets = train_test_split(
-temp_inputs, temp_targets, test_size=0.5, random_state=42
+temp_inputs, temp_targets, test_size=0.7, random_state=42
 )
 
 # Print statistics
@@ -64,8 +64,9 @@ output_size = 2
 hidden_layer_size = 100 # Same size for both hidden layers
 
 model = tf.keras.Sequential([
-   tf.keras.layers.Dense(hidden_layer_size, activation='relu', input_shape=(input_size,)),
-   tf.keras.layers.Dense(hidden_layer_size, activation='sigmoid'), 
+   tf.keras.layers.Dense(95, activation='relu', input_shape=(input_size,)),
+   tf.keras.layers.Dense(35, activation='relu'), 
+   tf.keras.layers.Dense(105, activation='relu'),
    tf.keras.layers.Dense(output_size, activation='softmax')
 ])
 
@@ -74,8 +75,8 @@ model.compile(
    loss='sparse_categorical_crossentropy', 
    metrics=['accuracy'])
 
-batch_size = 100
-max_epochs = 100
+batch_size = 30
+max_epochs = 50
 
 #? Early stopping to prevent overfitting, with patience 3
 early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', 
@@ -94,11 +95,11 @@ history = model.fit(train_inputs,
 
 
 #! Plot the data
-plt.figure(figsize=(8, 6))
-plt.plot(history.history['loss'], label='Train Loss')
-plt.plot(history.history['val_loss'], label='Validation Loss')
-plt.title('Model Loss')
-plt.xlabel('Epoch')
-plt.ylabel('Loss')
-plt.legend(loc='upper right')
-plt.show()
+# plt.figure(figsize=(8, 6))
+# plt.plot(history.history['loss'], label='Train Loss')
+# plt.plot(history.history['val_loss'], label='Validation Loss')
+# plt.title('Model Loss')
+# plt.xlabel('Epoch')
+# plt.ylabel('Loss')
+# plt.legend(loc='upper right')
+# plt.show()
