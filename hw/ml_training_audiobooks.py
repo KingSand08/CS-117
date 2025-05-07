@@ -5,9 +5,9 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 
 #? Read the file's matrix to a var
-raw_csv_data = np.loadtxt('Business_case_dataset.csv', delimiter=',')
+raw_csv_data = np.loadtxt('./hw/Business_case_dataset.csv', delimiter=',')
 
-#?w Preprocessing
+#? Preprocessing
 unscaled_inputs_all = raw_csv_data[:,1:-1] # remove first and last columns
 targets_all = raw_csv_data[:,-1] # saves targets to last column
 
