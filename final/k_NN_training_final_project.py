@@ -1,0 +1,64 @@
+from ml_settings import np, plt
+from format_data import format_data as data
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+
+def knn_builder(): 
+   #! Create k-NN Model
+   # #? Range of 'k' values to test
+   # k_values = range(1, 21)  # Try k from 1 to 20
+   # validation_accuracies = []
+
+   # #? Perform grid search on 'k' using validation set
+   # # NOT GOOD: Does not take into account overfitting!
+   # # num = 1
+   # # for k in k_values:
+   # #    knn = KNeighborsClassifier(n_neighbors=k)
+   # #    knn.fit(train_inputs, train_targets)
+   # #    val_preds = knn.predict(validation_inputs)
+   # #    acc = accuracy_score(validation_targets, val_preds)
+   # #    print(num, ': ', acc)
+   # #    validation_accuracies.append(acc)
+
+   #? Select best k found based on the validation set
+   # best_k = k_values[np.argmax(validation_accuracies)] # Represents the best number of nearest neighbors that are considered when classifying or predicting a new data point
+   # final_knn = KNeighborsClassifier(n_neighbors=best_k)
+   k = 3
+   final_knn_model = KNeighborsClassifier(n_neighbors=k)
+
+   # print('Best k found:', best_k)
+   return final_knn_model
+
+# Load Data
+train_inputs, train_targets, validation_inputs, validation_targets, test_inputs, test_targets = data()
+
+# Obtain k-NN model
+knn_model = knn_builder()
+
+#! Train Model
+knn_model.fit(train_inputs, train_targets)
+
+#! Evaluate on test set
+test_predicted_classes = knn_model.predict(test_inputs)
+
+#? Evaluate Model
+cm = confusion_matrix(test_targets, test_predicted_classes).T
+class_names = ['No Stroke', 'Stroke']
+
+# Print classification report
+print("\nClassification Report (Test Set Only):")
+print(classification_report(test_targets, test_predicted_classes, target_names=class_names))
+
+predictions = knn_model.predict(test_inputs)
+accuracy = accuracy_score(test_targets, predictions)
+
+print(accuracy)
+
+# Plot confusion matrix for k-NN model
+# plt.figure(figsize=(6, 4))
+# sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=class_names, yticklabels=class_names)
+# plt.xlabel("Predicted")
+# plt.ylabel("Actual")
+# plt.title(f"k-NN Confusion Matrix (k={k})")
+# plt.tight_layout()
+# plt.show()
