@@ -2,42 +2,42 @@ from ml_settings import np, tf, plt
 from format_data import format_data as data
 
 # Returns a deep learning model
-def dl_builder():
+
+def dl_builder(hidden_size1, hidden_size2, dropout_rate1, dropout_rate2):
    #! Deep Learning Model
    #? Set the input and output sizes
    input_size = 21
    output_size = 2
-   hidden_layer_size = 32 # Same size for both hidden layers
 
    dl_model = tf.keras.Sequential([
       tf.keras.Input(shape=(input_size,)),
-      tf.keras.layers.Dense(hidden_layer_size, activation='relu'),
-      tf.keras.layers.Dropout(0.3),
-      tf.keras.layers.Dense(hidden_layer_size, activation='relu'), 
-      tf.keras.layers.Dropout(0.3),
+      tf.keras.layers.Dense(hidden_size1, activation='relu'),
+      tf.keras.layers.Dropout(dropout_rate1),
+      tf.keras.layers.Dense(hidden_size2, activation='relu'), 
+      tf.keras.layers.Dropout(dropout_rate2),
       tf.keras.layers.Dense(output_size, activation='softmax')
    ])
    
    return dl_model
 
 # Run deep learning model given model from variable from dl_builder function
-def run_dl(model):
+def run_dl(model, learning_rate_size, batch_size_n, patience_size):
    # Extract the data from the formatting data function
    train_inputs, train_targets, validation_inputs, validation_targets, test_inputs, test_targets = data()
 
    #? Compile DL Model
    model.compile(
-      optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+      optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate_size),
       loss='sparse_categorical_crossentropy', 
       metrics=['accuracy'])
 
    #? Set Learning Variables
-   batch_size = 100
+   batch_size = batch_size_n
    max_epochs = 200
 
    #? Early stopping to prevent overfitting
    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', 
-                                                   patience=5, 
+                                                   patience=patience_size, 
                                                    restore_best_weights=True, 
                                                    verbose=0)
 
@@ -57,7 +57,7 @@ def run_dl(model):
    #! Evaluate on test set
    #? Prediction Results
    test_loss, test_accuracy = model.evaluate(test_inputs, test_targets, verbose=0)
-   predictions = model.predict(test_inputs)
+   predictions = model.predict(test_inputs, verbose=0)
    # predicted_classes = np.argmax(predictions, axis=1)
 
    # # #? Confusion Matrix

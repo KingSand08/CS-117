@@ -4,33 +4,24 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
 # Returns a k-NN learning model
-def knn_builder(): 
+def knn_builder(n_neighbors_size, weights_size, p_size): 
    #! Create k-NN Model
-   # #? Range of 'k' values to test
-   # k_values = range(1, 21)  # Try k from 1 to 20
-   # validation_accuracies = []
+   train_inputs, train_targets, validation_inputs, validation_targets, test_inputs, test_targets = data()
 
-   # #? Perform grid search on 'k' using validation set
-   # # NOT GOOD: Does not take into account overfitting!
-   # # num = 1
-   # # for k in k_values:
-   # #    knn = KNeighborsClassifier(n_neighbors=k)
-   # #    knn.fit(train_inputs, train_targets)
-   # #    val_preds = knn.predict(validation_inputs)
-   # #    acc = accuracy_score(validation_targets, val_preds)
-   # #    print(num, ': ', acc)
-   # #    validation_accuracies.append(acc)
+   # Search space
+   n_neighbors = n_neighbors_size
+   weights = weights_size
+   p = p_size # 1 = Manhattan, 2 = Euclidean
 
-   #? Select best k found based on the validation set
-   # best_k = k_values[np.argmax(validation_accuracies)] # Represents the best number of nearest neighbors that are considered when classifying or predicting a new data point
-   # final_knn = KNeighborsClassifier(n_neighbors=best_k)
-   k = 3
-   final_knn_model = KNeighborsClassifier(n_neighbors=k)
-
-   # print('Best k found:', best_k)
-   return final_knn_model
-
-
+   # Build model
+   knn_model = KNeighborsClassifier(
+      n_neighbors=n_neighbors,
+      weights=weights,
+      p=p
+   )
+   
+   return knn_model
+    
 # Run deep learning model given model from variable from dl_builder function
 def run_knn(knn_model):
    # Load Data
