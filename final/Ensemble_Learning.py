@@ -3,24 +3,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.ensemble import BaggingClassifier , ExtraTreesClassifier, VotingClassifier ,StackingClassifier , AdaBoostClassifier
+from sklearn.ensemble import BaggingClassifier, VotingClassifier
 from sklearn.metrics import accuracy_score
 
 from format_data import format_data as data
 from k_NN_training_final_project import knn_builder
-from DL_training_final_project import dl_builder
-from scikeras.wrappers import KerasClassifier
 
 from ml_settings import seed
-
 
 
 def run_ensemble_voting(layerSizes, act_func, solver_func, max_epochs, given_batch_size, patience, val_per, verboseness, early_stop_per) :

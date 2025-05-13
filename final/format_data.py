@@ -2,12 +2,27 @@ from ml_settings import seed, random, os, np
 import pandas as pd
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
+import joblib
 
 cached = {}
 
 #! Library Settings
 #? Pandas, settings
 pd.set_option('display.max_columns', None)
+
+raw_csv_data_location = './final/healthcare-dataset-stroke-data.csv'
+
+def get_headers():
+    csv_df = pd.read_csv(raw_csv_data_location, na_values='N/A')
+
+    # One-hot encode categorical columns
+    processed_df = ohe_replace_cols_at_pos(csv_df.copy(), ['gender','ever_married','work_type','Residence_type','smoking_status'])
+
+    # Ensure BMI is numeric
+    processed_df['bmi'] = pd.to_numeric(processed_df['bmi'], errors='coerce')
+    processed_df['bmi'] = processed_df['bmi'].fillna(processed_df['bmi'].median())
+
+    return list(processed_df.columns)
 
 # Prepare One-Hot Encoding
 ohe = preprocessing.OneHotEncoder(handle_unknown='ignore', sparse_output = False).set_output(transform='pandas')
@@ -32,7 +47,6 @@ def format_data(cache=True):
     #! Preprocessing
     #? Read the file's matrix to a var
     # raw_csv_data = np.loadtxt('./final/healthcare-dataset-stroke-data-iterable.csv', delimiter=',')
-    raw_csv_data_location = './final/healthcare-dataset-stroke-data.csv'
     csv_df = pd.read_csv(raw_csv_data_location, na_values='N/A')
 
     #? Adjust data in table to be usable for our purposes
@@ -47,6 +61,9 @@ def format_data(cache=True):
 
     # Convert the formated pandas data frame to numpy
     all_data = csv_df.to_numpy()
+    #? SAVE TO FILE
+    csv_df.to_csv('NEW_DATA.csv', index=True)
+
 
     # # Remove the first row (it only contains the headers)
     # all_data = np.delete(all_data, 0, axis=0)
@@ -74,7 +91,9 @@ def format_data(cache=True):
 
     #? Standardize Inputs [Sklearn section]
     scaled_inputs = preprocessing.scale(unscaled_inputs_equal_priors)
-    # scaled_inputs = unscaled_inputs_equal_priors
+    scaler = preprocessing.StandardScaler()
+    scaled_inputs = scaler.fit_transform(unscaled_inputs_equal_priors)
+    joblib.dump(scaler, "models/scaler.pkl")
 
     #? Shuffle the Data (just in case)
     # Shuffle indicies in the data
