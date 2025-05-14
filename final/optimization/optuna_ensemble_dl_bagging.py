@@ -30,13 +30,3 @@ def bagging_dl_objective(trial):
 
     model = build_ensemble_bagging_dl(n_estimators, layer_sizes, activation, solver, max_epochs, batch_size, patience, val_fraction, alpha, 0)
     return run_ensemble_bagging_dl(model)
-
-def run_study(n_trials=50):
-    study = optuna.create_study(direction="maximize", sampler=optuna.samplers.TPESampler(seed=seed))
-    study.optimize(bagging_dl_objective, n_trials=n_trials)
-    
-    print("Best trial:")
-    print(f"   Value: {study.best_value}")
-    print(f"  Params: {study.best_params}")
-    
-    return study

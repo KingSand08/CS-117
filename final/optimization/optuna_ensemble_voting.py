@@ -39,13 +39,3 @@ def voting_objective(trial):
         verboseness=0,
         early_stop_per=alpha
     )
-
-def run_study(n_trials=50):
-    study = optuna.create_study(direction="maximize", sampler=optuna.samplers.TPESampler(seed=seed))
-    study.optimize(voting_objective, n_trials=n_trials)
-    
-    print("Best trial:")
-    print(f"   Value: {study.best_value}")
-    print(f"  Params: {study.best_params}")
-    
-    return study

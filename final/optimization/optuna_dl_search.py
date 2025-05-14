@@ -12,8 +12,7 @@ tf.random.set_seed(seed)
 import optuna
 from DL_training_final_project import data
 import tensorflow as tf
-import numpy as np
-from sklearn.metrics import accuracy_score
+import numpy as npz
 
 
 train_inputs, train_targets, validation_inputs, validation_targets, _, _ = data()
@@ -64,15 +63,3 @@ def dl_objective(trial):
     # Evaluate on validation set
     val_loss, val_accuracy = model.evaluate(validation_inputs, validation_targets, verbose=0)
     return val_accuracy
-
-def run_study(n_trials=50):
-    # Run the study
-    study = optuna.create_study(direction="maximize", sampler=optuna.samplers.TPESampler(seed=seed))
-    study.optimize(dl_objective, n_trials=n_trials)
-
-    # Print best result
-    print("Best Trial:")
-    print(f"  Value: {study.value:.4f}")
-    print("  Params: ", study.best_params)
-    
-    return study

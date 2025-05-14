@@ -57,22 +57,8 @@ def run_dl(model, learning_rate_size, batch_size_n, patience_size):
    #! Evaluate on test set
    #? Prediction Results
    test_loss, test_accuracy = model.evaluate(test_inputs, test_targets, verbose=0)
-   predictions = model.predict(test_inputs, verbose=0)
+   # predictions = model.predict(test_inputs, verbose=0)
    # predicted_classes = np.argmax(predictions, axis=1)
-
-   # # #? Confusion Matrix
-   # from sklearn.metrics import confusion_matrix
-   # import seaborn as sns
-   # # Predict
-   # predicted_probs = model.predict(test_inputs)
-   # predicted_classes = np.argmax(predicted_probs, axis=1)
-
-   # # Compute confusion matrix and transpose it
-   # cm = confusion_matrix(test_targets, predicted_classes)
-   # cm = cm.T  # Transpose so actuals are columns
-
-   # # Labels
-   # class_names = ['No Stroke', 'Stroke']
 
    # from sklearn.metrics import classification_report
 
@@ -83,12 +69,3 @@ def run_dl(model, learning_rate_size, batch_size_n, patience_size):
    # print(f'Test accuracy: {test_accuracy:.4f}, Test loss: {test_loss:.4f}')
    
    return test_accuracy, test_loss
-
-   # Plot confusion matrix for DL model
-   # plt.figure(figsize=(6, 4))
-   # sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=class_names, yticklabels=class_names)
-   # plt.xlabel("Predicted")
-   # plt.ylabel("Actual")
-   # plt.title("Deep Learning Confusion Matrix")
-   # plt.tight_layout()
-   # plt.show()
