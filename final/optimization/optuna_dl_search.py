@@ -2,11 +2,19 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+from ml_settings import seed, np, tf
+os.environ['TF_DETERMINISTIC_OPS'] = '1'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # 0 = all logs, 1 = INFO, 2 = WARNING, 3 = ERROR
+os.environ['PYTHONHASHSEED'] = str(seed)
+np.random.seed(seed)
+tf.random.set_seed(seed)
+
 import optuna
 from DL_training_final_project import data
 import tensorflow as tf
 import numpy as np
 from sklearn.metrics import accuracy_score
+
 
 train_inputs, train_targets, validation_inputs, validation_targets, _, _ = data()
 
@@ -59,10 +67,12 @@ def dl_objective(trial):
 
 def run_study(n_trials=50):
     # Run the study
-    study = optuna.create_study(direction="maximize")
+    study = optuna.create_study(direction="maximize", sampler=optuna.samplers.TPESampler(seed=seed))
     study.optimize(dl_objective, n_trials=n_trials)
 
     # Print best result
     print("Best Trial:")
-    print("  Value: {:.4f}".format(study.best_value))
+    print(f"  Value: {study.value:.4f}")
     print("  Params: ", study.best_params)
+    
+    return study

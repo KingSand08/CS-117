@@ -12,6 +12,8 @@ from k_NN_training_final_project import knn_builder
 
 from ml_settings import seed
 
+np.random.seed(seed)
+
 
 def build_ensemble_voting(layerSizes, act_func, solver_func, max_epochs, given_batch_size, patience, val_per, early_stop_per, n_neighbors_size, weights_size, p_size, verboseness):
     knn_model = knn_builder(n_neighbors_size, weights_size, p_size)
@@ -57,7 +59,7 @@ def run_ensemble_voting(v):
     # print(accuracy)
     return accuracy
     
-def build_ensemble_bagging_dl(estimator_num, layerSizes, act_func, solver_func, max_epochs, given_batch_size, patience, val_per, verboseness, early_stop_per) :
+def build_ensemble_bagging_dl(estimator_num, layerSizes, act_func, solver_func, max_epochs, given_batch_size, patience, val_per, early_stop_per, verboseness) :
     dl_model = MLPClassifier(
         hidden_layer_sizes=layerSizes,
         activation=act_func,

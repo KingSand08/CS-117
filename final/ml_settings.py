@@ -14,9 +14,4 @@ np.random.seed(seed)
 import tensorflow as tf
 tf.random.set_seed(seed)
 
-#! Library Settings
-#? Turn randomness off by uncommenting these
-np.random.seed(42)
-tf.random.set_seed(42)
-
 import matplotlib.pyplot as plt
