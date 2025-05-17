@@ -5,7 +5,7 @@ import seaborn as sns
 
 from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble import BaggingClassifier, VotingClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, f1_score
 
 from format_data import format_data as data
 from k_NN_training_final_project import knn_builder
@@ -49,15 +49,22 @@ def run_ensemble_voting(v):
     v.fit(train_inputs,train_targets)
 
 
-    # make predictions 
-    predictions = v.predict(test_inputs)
+    #? Validation Accuracy
+    val_preds = v.predict(validation_inputs)
+    val_acc = accuracy_score(validation_targets, val_preds)
+    print(f"Validation accuracy: {val_acc:.2f}")
+
+    #? Test Accuracy
+    test_preds = v.predict(test_inputs)
+    test_acc = accuracy_score(test_targets, test_preds)
+    print(f"Test accuracy:       {test_acc:.2f}")
+
+    #? F1 Stoke Score
+    test_f1_stroke = f1_score(test_targets, test_preds, pos_label=1)
+    print(f"F1-score (Stroke):   {test_f1_stroke:.2f}")
 
 
-    # get model accuracy 
-    accuracy = accuracy_score(test_targets,predictions)
-
-    # print(accuracy)
-    return accuracy
+    return test_f1_stroke
     
 def build_ensemble_bagging_dl(estimator_num, layerSizes, act_func, solver_func, max_epochs, given_batch_size, patience, val_per, early_stop_per, verboseness) :
     dl_model = MLPClassifier(
@@ -91,15 +98,22 @@ def run_ensemble_bagging_dl(b):
     b.fit(train_inputs,train_targets)
 
 
-    # make predictions 
-    predictions = b.predict(test_inputs)
+    #? Validation Accuracy
+    val_preds = b.predict(validation_inputs)
+    val_acc = accuracy_score(validation_targets, val_preds)
+    print(f"Validation accuracy: {val_acc:.2f}")
 
+    #? Test Accuracy
+    test_preds = b.predict(test_inputs)
+    test_acc = accuracy_score(test_targets, test_preds)
+    print(f"Test accuracy:       {test_acc:.2f}")
 
-    # get model accuracy 
-    accuracy = accuracy_score(test_targets,predictions)
-
-    # print(accuracy)
-    return accuracy
+    #? F1 Stoke Score
+    test_f1_stroke = f1_score(test_targets, test_preds, pos_label=1)
+    print(f"F1-score (Stroke):   {test_f1_stroke:.4f}")
+    
+    
+    return test_f1_stroke
     
 def build_ensemble_bagging_knn(estimator_num, n_neighbors_size, weights_size, p_size):
     knn_model = knn_builder(n_neighbors_size, weights_size, p_size)
@@ -120,12 +134,19 @@ def run_ensemble_bagging_knn(b):
     b.fit(train_inputs,train_targets)
 
 
-    # make predictions 
-    predictions = b.predict(test_inputs)
+    #? Validation Accuracy
+    val_preds = b.predict(validation_inputs)
+    val_acc = accuracy_score(validation_targets, val_preds)
+    print(f"Validation accuracy: {val_acc:.2f}")
 
+    #? Test Accuracy
+    test_preds = b.predict(test_inputs)
+    test_acc = accuracy_score(test_targets, test_preds)
+    print(f"Test accuracy:       {test_acc:.2f}")
 
-    # get model accuracy 
-    accuracy = accuracy_score(test_targets,predictions)
+    #? F1 Stoke Score
+    test_f1_stroke = f1_score(test_targets, test_preds, pos_label=1)
+    print(f"F1-score (Stroke):   {test_f1_stroke:.4f}")
 
     # print(accuracy)
-    return accuracy
+    return test_f1_stroke

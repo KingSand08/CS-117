@@ -107,12 +107,12 @@ def format_data(cache=True):
     #? Splitting the data
     # Split the dataset into train and temp sets
     train_inputs, temp_inputs, train_targets, temp_targets = train_test_split(
-    shuffled_inputs, shuffled_targets, test_size=0.2, random_state=42
+    shuffled_inputs, shuffled_targets, test_size=0.2, random_state=seed
     )
 
     # Split the temp set into validation (50% of temp) and test (50% of temp) sets
     validation_inputs, test_inputs, validation_targets, test_targets = train_test_split(
-    temp_inputs, temp_targets, test_size=0.5, random_state=42
+    temp_inputs, temp_targets, test_size=0.5, random_state=seed
     )
     
     # SMOKED HERE --> (SMARTER THAN RANDOM OVERSAMPLING)

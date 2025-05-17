@@ -10,12 +10,10 @@ np.random.seed(seed)
 tf.random.set_seed(seed)
 
 import optuna
-from DL_training_final_project import data
+from DL_training_final_project import dl_builder, run_dl
 import tensorflow as tf
 import numpy as npz
 
-
-train_inputs, train_targets, validation_inputs, validation_targets, _, _ = data()
 
 def dl_objective(trial):
     # Suggest hyperparameters
@@ -27,39 +25,45 @@ def dl_objective(trial):
     batch_size = trial.suggest_categorical("batch_size", [16, 32, 64, 100, 128, 256])
     patience_size = trial.suggest_int("patience", 2, 8)
 
-    # Build model
-    model = tf.keras.Sequential([
-        tf.keras.Input(shape=(train_inputs.shape[1],)),
+    
+    dl_model = dl_builder(hidden_size1, hidden_size2, dropout_rate1, dropout_rate2)
+    dl_test_accuracy, dl_test_loss = run_dl(dl_model, learning_rate, batch_size, patience_size)     #51% #!OPTUNA APPROVED? (80%)
+
+
+    return dl_test_accuracy
+
+
+def dl_objective_1(trial):
+    # Suggest hyperparameters
+    hidden_size1 = trial.suggest_int("hidden_size1", 16, 128)
+    hidden_size2 = trial.suggest_int("hidden_size2", 16, 128)
+    hidden_size3 = trial.suggest_int("hidden_size3", 16, 128)
+    dropout_rate1 = trial.suggest_float("dropout_rate1", 0, 0.5)
+    dropout_rate2 = trial.suggest_float("dropout_rate2", 0, 0.5)
+    dropout_rate3 = trial.suggest_float("dropout_rate3", 0, 0.5)
+    learning_rate = trial.suggest_loguniform("learning_rate", 1e-4, 1e-2)
+    batch_size = trial.suggest_categorical("batch_size", [16, 32, 64, 100, 128, 256])
+    patience_size = trial.suggest_int("patience", 2, 8)
+
+    
+    # dl_model = dl_builder(hidden_size1, hidden_size2, dropout_rate1, dropout_rate2)
+    
+    input_size = 21
+    output_size = 2
+
+    dl_model = tf.keras.Sequential([
+        tf.keras.Input(shape=(input_size,)),
         tf.keras.layers.Dense(hidden_size1, activation='relu'),
         tf.keras.layers.Dropout(dropout_rate1),
-        tf.keras.layers.Dense(hidden_size2, activation='relu'),
+        tf.keras.layers.Dense(hidden_size2, activation='relu'), 
         tf.keras.layers.Dropout(dropout_rate2),
-        tf.keras.layers.Dense(2, activation='softmax')
+        tf.keras.layers.Dense(hidden_size3, activation='relu'), 
+        tf.keras.layers.Dropout(dropout_rate3),
+        tf.keras.layers.Dense(output_size, activation='softmax')
     ])
 
-    model.compile(
-        optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
-        loss='sparse_categorical_crossentropy',
-        metrics=['accuracy']
-    )
+    
+    dl_test_accuracy, dl_test_loss = run_dl(dl_model, learning_rate, batch_size, patience_size)     #51% #!OPTUNA APPROVED? (80%)
 
-    early_stopping = tf.keras.callbacks.EarlyStopping(
-        monitor='val_loss',
-        patience=patience_size,
-        restore_best_weights=True,
-        verbose=0
-    )
 
-    history = model.fit(
-        train_inputs,
-        train_targets,
-        epochs=200,
-        batch_size=batch_size,
-        validation_data=(validation_inputs, validation_targets),
-        callbacks=[early_stopping],
-        verbose=0
-    )
-
-    # Evaluate on validation set
-    val_loss, val_accuracy = model.evaluate(validation_inputs, validation_targets, verbose=0)
-    return val_accuracy
+    return dl_test_accuracy

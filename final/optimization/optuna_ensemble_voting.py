@@ -10,7 +10,7 @@ np.random.seed(seed)
 tf.random.set_seed(seed)
 
 import optuna
-from Ensemble_Learning_final_project import run_ensemble_voting
+from Ensemble_Learning_final_project import run_ensemble_voting, build_ensemble_voting
 
 
 def voting_objective(trial):
@@ -27,15 +27,24 @@ def voting_objective(trial):
     patience = trial.suggest_int("patience", 3, 10)
     val_fraction = trial.suggest_float("val_fraction", 0.1, 0.3)
     alpha = trial.suggest_float("alpha", 1e-5, 1e-1)
-
+    
+    n_neighbors = trial.suggest_int('n_neighbors', 1, 256)
+    weights = trial.suggest_categorical('weights', ['uniform', 'distance'])
+    p = trial.suggest_int('p', 1, 2)  # 1 = Manhattan, 2 = Euclidean
+    
     return run_ensemble_voting(
-        layerSizes=layer_sizes,
-        act_func=activation,
-        solver_func=solver,
-        max_epochs=max_epochs,
-        given_batch_size=batch_size,
-        patience=patience,
-        val_per=val_fraction,
-        verboseness=0,
-        early_stop_per=alpha
+        build_ensemble_voting(
+            layerSizes=layer_sizes,
+            act_func=activation,
+            solver_func=solver,
+            max_epochs=max_epochs,
+            given_batch_size=batch_size,
+            patience=patience,
+            val_per=val_fraction,
+            early_stop_per=alpha,
+            n_neighbors_size=n_neighbors, 
+            weights_size=weights, 
+            p_size=p,
+            verboseness=0,
+        )
     )

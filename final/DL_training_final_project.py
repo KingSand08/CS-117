@@ -1,3 +1,4 @@
+from sklearn.metrics import f1_score
 from ml_settings import np, tf, plt
 from format_data import format_data as data
 
@@ -19,6 +20,27 @@ def dl_builder(hidden_size1, hidden_size2, dropout_rate1, dropout_rate2):
    ])
    
    return dl_model
+
+
+def dl_builder_1(hidden_size1, hidden_size2, hidden_size3, dropout_rate1, dropout_rate2, dropout_rate3):
+   #! Deep Learning Model
+   #? Set the input and output sizes
+   input_size = 21
+   output_size = 2
+
+   dl_model = tf.keras.Sequential([
+      tf.keras.Input(shape=(input_size,)),
+      tf.keras.layers.Dense(hidden_size1, activation='relu'),
+      tf.keras.layers.Dropout(dropout_rate1),
+      tf.keras.layers.Dense(hidden_size2, activation='relu'), 
+      tf.keras.layers.Dropout(dropout_rate2),
+      tf.keras.layers.Dense(hidden_size3, activation='relu'), 
+      tf.keras.layers.Dropout(dropout_rate3),
+      tf.keras.layers.Dense(output_size, activation='softmax')
+   ])
+   
+   return dl_model
+
 
 # Run deep learning model given model from variable from dl_builder function
 def run_dl(model, learning_rate_size, batch_size_n, patience_size):
@@ -55,17 +77,19 @@ def run_dl(model, learning_rate_size, batch_size_n, patience_size):
 
 
    #! Evaluate on test set
-   #? Prediction Results
-   test_loss, test_accuracy = model.evaluate(test_inputs, test_targets, verbose=0)
-   # predictions = model.predict(test_inputs, verbose=0)
-   # predicted_classes = np.argmax(predictions, axis=1)
+   #? Validation Accuracy
+   best_val_acc = max(history.history['val_accuracy'])
+   print(f"Validation accuracy: {best_val_acc:.4f}")
 
-   # from sklearn.metrics import classification_report
+   #? Test Accuracy
+   test_loss, test_acc = model.evaluate(test_inputs, test_targets, verbose=0)
+   print(f"Test accuracy:       {test_acc:.4f}")
 
-   # # Print classification report
-   # print("\nClassification Report (Test Set Only):")
-   # print(classification_report(test_targets, predicted_classes, target_names=class_names))
-
-   # print(f'Test accuracy: {test_accuracy:.4f}, Test loss: {test_loss:.4f}')
+   #? F1 Stoke Score
+   preds = model.predict(test_inputs, verbose=0)
+   pred_classes = np.argmax(preds, axis=1)
+   f1_stroke = f1_score(test_targets, pred_classes, pos_label=1)
+   print(f"F1-score (Stroke=1): {f1_stroke:.4f}")
    
-   return test_accuracy, test_loss
+
+   return test_acc, test_loss, f1_stroke
