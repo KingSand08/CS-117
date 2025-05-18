@@ -70,20 +70,20 @@ def prettyRunModelTest(user_data):
     loaded_dl_model = tf.keras.models.load_model("models/dl_model.keras")
     predict_with_model(loaded_dl_model, user_data, True)
 
-    print('-' * 10 + ' K-NN MODEL ' + '-' * 10)
-    loaded_knn_model = joblib.load("models/knn_model.pkl")
-    predict_with_model(loaded_knn_model, user_data)
+    # print('-' * 10 + ' K-NN MODEL ' + '-' * 10)
+    # loaded_knn_model = joblib.load("models/knn_model.pkl")
+    # predict_with_model(loaded_knn_model, user_data)
 
-    print('-' * 10 + ' VOTING MODEL ' + '-' * 10)
-    loaded_voting_model = joblib.load("models/voting_model.pkl")
-    predict_with_model(loaded_voting_model, user_data)
+    # print('-' * 10 + ' VOTING MODEL ' + '-' * 10)
+    # loaded_voting_model = joblib.load("models/voting_model.pkl")
+    # predict_with_model(loaded_voting_model, user_data)
 
-    print('-' * 10 + ' ENSEMBLE BAGGING (DL) MODEL ' + '-' * 10)
-    loaded_dl_bagging_model = joblib.load("models/dl_bagging_model.pkl")
-    predict_with_model(loaded_dl_bagging_model, user_data)
+    # print('-' * 10 + ' ENSEMBLE BAGGING (DL) MODEL ' + '-' * 10)
+    # loaded_dl_bagging_model = joblib.load("models/dl_bagging_model.pkl")
+    # predict_with_model(loaded_dl_bagging_model, user_data)
 
-    print('-' * 10 + ' ENSEMBLE BAGGING (KNN) MODEL ' + '-' * 10)
-    loaded_knn_bagging_model = joblib.load("models/knn_bagging_model.pkl")
-    predict_with_model(loaded_knn_bagging_model, user_data)
+    # print('-' * 10 + ' ENSEMBLE BAGGING (KNN) MODEL ' + '-' * 10)
+    # loaded_knn_bagging_model = joblib.load("models/knn_bagging_model.pkl")
+    # predict_with_model(loaded_knn_bagging_model, user_data)
     
 prettyRunModelTest(raw_input_row1)
