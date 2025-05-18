@@ -69,14 +69,14 @@ print("DEEP LEARNING MODEL (3 Hidden Layers):")
 # dl_model = dl_builder_1(80, 125, 25, 0.0, 0.0, 0.0)
 # dl_test_accuracy, dl_test_loss, dl_f1_score = run_dl(dl_model, 0.0003568738661706191, 16, 7)    # Test accuracy: 0.8000, Test loss: 0.5140
 
-# dl_model = dl_builder_1(64, 128, 32, 0.0, 0.0, 0.0)
-# dl_test_accuracy, dl_test_loss, dl_f1_score = run_dl(dl_model, 0.0003568738661706191, 16, 7)    # Test accuracy: 0.6800, Test loss: 0.6257
+dl_model = dl_builder_1(64, 128, 32, 0.0, 0.0, 0.0)
+dl_test_accuracy, dl_test_loss, dl_f1_score = run_dl(dl_model, 0.0003568738661706191, 16, 7)    # Test accuracy: 0.6800, Test loss: 0.6257
 
 # dl_model = dl_builder_1(80, 125, 25, 0, 0.01, 0.0)
 # dl_test_accuracy, dl_test_loss, dl_f1_score = run_dl(dl_model, 0.0003568738661706191, 16, 3)    # Test accuracy: 0.7600, Test loss: 0.5393
 
-dl_model = dl_builder_1(80, 125, 25, 0, 0, 0.01)
-dl_test_accuracy, dl_test_loss, dl_f1_score = run_dl(dl_model, 0.0003568738661706191, 16, 3)    # Test accuracy: 0.7800, Test loss: 0.5181
+# dl_model = dl_builder_1(80, 125, 25, 0, 0, 0.01)
+# dl_test_accuracy, dl_test_loss, dl_f1_score = run_dl(dl_model, 0.0003568738661706191, 16, 3)    # Test accuracy: 0.7800, Test loss: 0.5181
 
 # dl_model = dl_builder_1(80, 125, 25, 0.01, 0, 0)
 # dl_test_accuracy, dl_test_loss, dl_f1_score = run_dl(dl_model, 0.0003568738661706191, 16, 3)    # Test accuracy: 0.7800, Test loss: 0.5061
